@@ -105,7 +105,6 @@ export default function Page() {
                   <li key={`${item.title}-${i}`} className="relative">
                     <span className="absolute -left-[9px] top-1.5 h-2.5 w-2.5 rounded-full bg-indigo-600 ring-4 ring-indigo-600/15" />
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-semibold">{item.year}</span>
                       <span className="text-black/40 dark:text-white/40">·</span>
                       <span className="text-sm font-medium">{item.title}</span>
                     </div>
@@ -127,7 +126,6 @@ export default function Page() {
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="text-sm font-semibold">{item.title}</span>
                       <span className="text-black/40 dark:text-white/40">·</span>
-                      <span className="text-xs text-black/60 dark:text-white/60">{item.period}</span>
                     </div>
                     <p className="mt-1 text-[13.5px] leading-7 text-black/75 dark:text-white/75">
                       {item.desc}
