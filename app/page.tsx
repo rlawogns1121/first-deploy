@@ -1,78 +1,175 @@
 import Image from "next/image";
+import Link from "next/link";
+import { profile, experiences, projects } from "@/data/resume";
 
-// 서버 컴포넌트에서 직접 API 호출
-async function getResumeInfo() {
-  const res = await fetch('https://raw.githubusercontent.com/rlawogns1121/first-deploy/refs/heads/main/service/resume_general_info_service.json');
-  // API 응답이 성공적인지 확인
-  if (!res.ok) {
-    // 응답이 실패하면 오류를 던져 Next.js가 오류 페이지를 보여주도록 함
-    throw new Error('Failed to fetch data');
-  }
-  return res.json();
-}
+export const metadata = {
+  title: profile.name,
+  description: "개인 이력서",
+};
 
-async function getResumePortfolio() {
-  const res = await fetch(
-    "https://raw.githubusercontent.com/rlawogns1121/first-deploy/refs/heads/main/service/resume_portfolio_service.json"
-  );
-  if (!res.ok) throw new Error("Failed to fetch portfolio info");
-  return res.json();
-}
-
-export default async function Home() {
-  const data = await getResumeInfo();
-  const portfolio = await getResumePortfolio();
+/* ————— 작은 빌딩 블록 ————— */
+function Section({
+  title,
+  children,
+  className,
+}: React.PropsWithChildren<{ title: string; className?: string }>) {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/hoon.jpg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            안녕하세요,  
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-            {data.name}입니다.
-            </code>
-            
-          </li>
-          <li className="tracking-[-.01em]">
-            팀 프로젝트 이름은 {portfolio.project_name} 입니다. 
-          </li>
-          <li>
-            {portfolio.project_description} 하는 프로젝트입니다.
-          </li>
-        </ol>
+    <section className={`rounded-xl border border-stone-200 bg-white ${className ?? ""}`}>
+      <header className="flex items-center gap-2 border-b border-stone-200 px-5 py-3">
+        <h2 className="text-sm font-semibold tracking-tight">{title}</h2>
+      </header>
+      <div className="p-5">{children}</div>
+    </section>
+  );
+}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://github.com/Pazinpo/1_PJT"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Health Routine Tracker
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://github.com/rlawogns1121/first-deploy"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            first-deploy
-          </a>
+function Tag({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full border border-stone-300 bg-stone-50 px-2.5 py-[3px] text-[11px] font-medium text-stone-700">
+      {children}
+    </span>
+  );
+}
+
+/* ————— 페이지 ————— */
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-stone-50 text-stone-900">
+      {/* 상단바 */}
+      <div className="sticky top-0 z-10 border-b border-stone-200/80 bg-white/80 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
+          <div className="text-[13px] font-semibold tracking-tight">{profile.name}</div>
+          <div className="flex items-center gap-3 text-xs">
+            <Link
+              href={profile.links.github}
+              target="_blank"
+              className="text-blue-600 hover:underline underline-offset-4"
+            >
+              GitHub
+            </Link>
+            <span className="text-stone-300">•</span>
+            <a
+              href={`mailto:${profile.links.email}`}
+              className="hover:underline underline-offset-4"
+            >
+              {profile.links.email}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <main className="mx-auto max-w-5xl px-5 py-8">
+        {/* 프로필 카드 */}
+        <div className="mb-8 grid gap-6 md:grid-cols-[220px,1fr]">
+          <div className="rounded-xl border border-stone-200 bg-white p-5">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 overflow-hidden rounded-full ring-1 ring-stone-200">
+                <Image
+                  src={profile.photo}
+                  alt={profile.name}
+                  width={64}
+                  height={64}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <div className="text-base font-semibold">{profile.name}</div>
+                <div className="text-sm text-stone-600">{profile.title}</div>
+              </div>
+            </div>
+          </div>
+  
+          <div className="rounded-xl border border-stone-200 bg-white p-5">
+            <p className="text-sm leading-7 text-stone-800">
+              꾸준히 개선하고 기록하는 개발자입니다. 명확한 커뮤니케이션과
+              단순한 구조를 선호하며, 사용자 가치를 만드는 일에 집중합니다.
+            </p>
+          </div>
+        </div>
+
+        {/* 2-컬럼: 경험 · 프로젝트 */}
+        <div className="grid gap-8 lg:grid-cols-2">
+          {/* 경험 */}
+          <Section title="경험">
+            <div className="grid gap-6 sm:grid-cols-2">
+              {/* 컨퍼런스 */}
+              <div className="rounded-lg bg-stone-50 p-4 ring-1 ring-stone-100">
+                <div className="mb-3"><Tag>컨퍼런스</Tag></div>
+                <ul className="space-y-3">
+                  {experiences.job.map((item, i) => (
+                    <li key={`${item.title}-${i}`} className="text-sm">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-stone-400">·</span>
+                        <span className="font-medium">{item.title}</span>
+                      </div>
+                      <p className="mt-1 leading-6 text-stone-700">{item.desc}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 교육 */}
+              <div className="rounded-lg bg-stone-50 p-4 ring-1 ring-stone-100">
+                <div className="mb-3"><Tag>교육</Tag></div>
+                <ul className="space-y-3">
+                  {experiences.education.map((item, i) => (
+                    <li key={`${item.title}-${i}`} className="text-sm">
+                      <div className="font-medium">{item.title}</div>
+                      <p className="mt-1 leading-6 text-stone-700">{item.desc}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Section>
+
+          {/* 프로젝트 */}
+          <Section title="프로젝트">
+            <div className="grid gap-4">
+              {projects.map((p, i) => (
+                <Link
+                  key={`${p.url}-${i}`}
+                  href={p.url}
+                  target="_blank"
+                  className="group rounded-lg border border-stone-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+                >
+                  <div className="mb-1 text-[15px] font-semibold">{p.name}</div>
+                  <p className="text-sm text-stone-700">{p.desc}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {p.tags.map((t) => (
+                      <Tag key={t}>{t}</Tag>
+                    ))}
+                  </div>
+                  <span className="mt-2 inline-block text-[11px] text-blue-600 opacity-0 transition-opacity group-hover:opacity-100">
+                    링크 열기 →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </Section>
+        </div>
+
+        {/* 푸터 */}
+        <div className="mt-10 rounded-xl border border-stone-200 bg-white p-6 text-center">
+          <p className="text-sm text-stone-700">
+            좋은 인연으로 만나볼 수 있기를 바랍니다.
+          </p>
+          <div className="mt-3 flex items-center justify-center gap-4 text-sm">
+            <Link
+              href={profile.links.github}
+              target="_blank"
+              className="text-blue-600 underline underline-offset-4 hover:text-blue-700"
+            >
+              GitHub
+            </Link>
+            <span className="text-stone-300">•</span>
+            <a
+              className="underline underline-offset-4 hover:text-stone-900"
+              href={`mailto:${profile.links.email}`}
+            >
+              {profile.links.email}
+            </a>
+          </div>
         </div>
       </main>
     </div>
