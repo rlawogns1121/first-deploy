@@ -16,8 +16,8 @@ export const traits = [
 
 export const experiences = {
   education: [
-    { year: "2018 2.~ 2022 2.", title: "한세대학교", desc: "컴퓨터공학과" },
-    { year: "2025 7. ~", title: "LG CNS AI INSPIRE CAMP 3기", desc: "FRONTEND, BACKEND, MSA 교육과정" },
+    { year: "2018 2.~ 2022 2.", title: " 한세대학교", desc: "컴퓨터공학과" },
+    { year: "2025 7. ~", title: " LG CNS AI INSPIRE CAMP 3기", desc: "FRONTEND, BACKEND, MSA 교육과정" },
 
   ],
   job: [
