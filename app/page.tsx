@@ -38,7 +38,6 @@ export default function Home() {
       {/* 상단바 */}
       <div className="sticky top-0 z-10 border-b border-stone-200/80 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
-          <div className="text-[13px] font-semibold tracking-tight">{profile.name}</div>
           <div className="flex items-center gap-3 text-xs">
             <Link
               href={profile.links.github}
